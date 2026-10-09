@@ -17,7 +17,7 @@
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=3600"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Experiments built by AI agents are untrusted code. They are shown in a sandboxed iframe AND locked down here:
 # no network access (connect-src 'self'), no external scripts or frames, opaque origin (sandbox without allow-same-origin).
