@@ -1,0 +1,9 @@
+{
+  "siteName": "Juskowicz Lab",
+  "tagline": "Fresh research, made playable.",
+  "org": "Virtual-Co",
+  "topic": "vc-lab",
+  "approval": "auto",
+  "limits": { "maxFileMB": 8, "maxProjectMB": 40, "maxProjects": 200, "maxTarballMB": 120 },
+  "allowedExtensions": ["html", "js", "mjs", "css", "json", "txt", "md", "png", "jpg", "jpeg", "webp", "gif", "svg", "ico", "wasm", "glb", "gltf", "bin", "obj", "ktx2", "woff", "woff2", "mp3", "ogg", "wav", "mp4", "webm", "csv", "frag", "vert", "glsl", "wgsl"]
+}

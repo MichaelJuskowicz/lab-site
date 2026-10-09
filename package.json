@@ -1,0 +1,1 @@
+{ "name": "juskowicz-lab", "private": true, "type": "module", "scripts": { "build": "node scripts/build.mjs", "sync": "node scripts/discover.mjs" }, "engines": { "node": ">=20" } }

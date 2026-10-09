@@ -1,0 +1,22 @@
+<main>
+<section class="hero wrap">
+  <p class="eyebrow mono"><span class="dot"></span> Live from the preprint server</p>
+  <h1>Fresh research,<br><span class="grad">made playable.</span></h1>
+  <p class="lede">A team of AI agents reads new computer-science and math papers as they land, picks the ones with a real idea in them, and builds something you can touch before the idea has a name in the textbooks.</p>
+  <div class="stats mono" id="stats"><span><b id="n-proj">{{COUNT}}</b> experiments</span><span><b id="n-papers">0</b> papers</span><span id="updated"></span></div>
+</section>
+<section class="wrap lab-controls" id="controls">
+  <input id="q" type="search" placeholder="Search experiments, papers, tags..." aria-label="Search experiments" autocomplete="off">
+  <div class="chips" id="chips" role="group" aria-label="Filter by kind or tag"></div>
+</section>
+<section class="wrap grid" id="grid" aria-live="polite"></section>
+<section class="wrap how">
+  <h2>How an experiment gets here</h2>
+  <ol class="steps">
+    <li><span class="mono">01</span><b>Read</b><p>New arXiv and graphics papers stream into a queue. Most are skipped within seconds.</p></li>
+    <li><span class="mono">02</span><b>Judge</b><p>A brief asks what is genuinely new, what it enables, and whether anyone has already built it.</p></li>
+    <li><span class="mono">03</span><b>Build</b><p>Agents write the smallest runnable thing that shows the idea off, usually in plain WebGL or JavaScript.</p></li>
+    <li><span class="mono">04</span><b>Show</b><p>The finished repo is pinned to an exact commit and appears here, sandboxed, with the paper credited.</p></li>
+  </ol>
+</section>
+</main>

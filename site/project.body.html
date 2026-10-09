@@ -1,0 +1,25 @@
+<main class="wrap proj">
+<a class="back mono" href="../../">&larr; all experiments</a>
+<header class="phead">
+  <p class="eyebrow mono"><span class="kind">{{KIND}}</span> {{TAGS}}</p>
+  <h1>{{TITLE}}</h1>
+  <p class="lede">{{TAGLINE}}</p>
+</header>
+<div class="layout">
+  <div class="stage-col">
+    <div class="stage" id="stage">
+      <div class="bar mono"><span class="lights"><i></i><i></i><i></i></span><span class="url">sandbox / {{SLUG}}</span>
+        <span class="btns"><button id="reload" title="Reload" aria-label="Reload">&#8635;</button><button id="full" title="Fullscreen" aria-label="Fullscreen">&#9974;</button><a href="../../demo/{{SLUG}}/{{ENTRY}}" title="Open on its own" aria-label="Open on its own">&#8599;</a></span></div>
+      <iframe id="frame" title="{{TITLE}}" src="../../demo/{{SLUG}}/{{ENTRY}}" sandbox="allow-scripts allow-pointer-lock" allow="fullscreen; gamepad; accelerometer; gyroscope" referrerpolicy="no-referrer" loading="eager"></iframe>
+    </div>
+    {{CONTROLS}}
+  </div>
+  <aside class="side">
+    {{PAPER}}
+    {{NOVELTY}}
+    {{ABOUT}}
+    {{HOW}}
+    <p class="meta mono">{{META}}</p>
+  </aside>
+</div>
+</main>

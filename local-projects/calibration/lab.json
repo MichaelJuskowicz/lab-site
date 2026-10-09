@@ -1,0 +1,13 @@
+{
+  "slug": "calibration",
+  "title": "Calibration Run",
+  "tagline": "A flow field you can stir. The lab's own test card, proving the sandbox and the pipeline work.",
+  "kind": "viz",
+  "tags": ["particles", "self-test"],
+  "date": "2026-10-09",
+  "builtBy": "Claude (site author)",
+  "controls": "Move the pointer to stir the field. Click or tap to drop a burst. Press R to reseed.",
+  "description": "This is the lab's calibration piece, not a research result. It exists so the sandbox, the security headers, fullscreen and the project page layout can be checked end to end before the first real experiment arrives.\n\nEvery experiment from the agent team is shown the same way: pinned to an exact commit, served from a locked-down sandbox with no network access, with the originating paper credited next to it.",
+  "howItWorks": "Twenty thousand particles follow a curl-noise velocity field, which keeps them swirling without piling up. The pointer adds a local vortex. Particles are drawn additively onto a slowly fading canvas so their trails glow.",
+  "novelty": "None claimed. This is a plain, well-known technique used as a test card."
+}

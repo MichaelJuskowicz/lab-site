@@ -1,0 +1,54 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calibration Run</title>
+<style>html,body{margin:0;height:100%;background:#04060a;overflow:hidden;cursor:crosshair}canvas{display:block;width:100%;height:100%}
+#h{position:fixed;left:14px;bottom:12px;font:12px ui-monospace,Menlo,Consolas,monospace;color:#7cffcb99;pointer-events:none}</style>
+<canvas id="c"></canvas><div id="h">calibration / curl-noise field / <span id="fps"></span></div>
+<script>
+(() => {
+  const cv = document.getElementById("c"), g = cv.getContext("2d");
+  let W, H, dpr; const N = 20000;
+  const px = new Float32Array(N), py = new Float32Array(N), age = new Float32Array(N);
+  let mx = -1e3, my = -1e3, mdx = 0, mdy = 0, burst = [];
+  function size() { dpr = Math.min(devicePixelRatio || 1, 2); W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr; g.fillStyle = "#04060a"; g.fillRect(0, 0, W, H); }
+  addEventListener("resize", size); size();
+  function seed(i) { px[i] = Math.random() * W; py[i] = Math.random() * H; age[i] = Math.random() * 200; }
+  for (let i = 0; i < N; i++) seed(i);
+  // value noise + analytic-ish curl via finite differences
+  const hsh = (x, y) => { let h = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return h - Math.floor(h); };
+  const sm = (t) => t * t * (3 - 2 * t);
+  const noise = (x, y) => { const ix = Math.floor(x), iy = Math.floor(y), fx = sm(x - ix), fy = sm(y - iy);
+    return hsh(ix, iy) * (1 - fx) * (1 - fy) + hsh(ix + 1, iy) * fx * (1 - fy) + hsh(ix, iy + 1) * (1 - fx) * fy + hsh(ix + 1, iy + 1) * fx * fy; };
+  let t = 0;
+  addEventListener("pointermove", (e) => { const x = e.clientX * dpr, y = e.clientY * dpr; mdx = x - mx; mdy = y - my; mx = x; my = y; });
+  addEventListener("pointerdown", (e) => burst.push({ x: e.clientX * dpr, y: e.clientY * dpr, a: 1 }));
+  addEventListener("keydown", (e) => { if (e.key === "r" || e.key === "R") { g.fillStyle = "#04060a"; g.fillRect(0, 0, W, H); for (let i = 0; i < N; i++) seed(i); } });
+  let last = performance.now(), fpsAcc = 0, fpsN = 0;
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now; t += dt * 0.12;
+    fpsAcc += dt; fpsN++; if (fpsAcc > 0.5) { document.getElementById("fps").textContent = Math.round(fpsN / fpsAcc) + " fps"; fpsAcc = 0; fpsN = 0; }
+    g.globalCompositeOperation = "source-over"; g.fillStyle = "rgba(4,6,10,0.07)"; g.fillRect(0, 0, W, H);
+    g.globalCompositeOperation = "lighter";
+    const sc = 0.0016 / dpr * 2, e = 0.8, speed = 70 * dpr;
+    for (let i = 0; i < N; i++) {
+      let x = px[i], y = py[i];
+      const nx = x * sc, ny = y * sc;
+      const dx = noise(nx, ny + e + t) - noise(nx, ny - e + t), dy = noise(nx + e, ny + t) - noise(nx - e, ny + t);
+      let vx = dx * speed * 2.2, vy = -dy * speed * 2.2;
+      const ddx = x - mx, ddy = y - my, d2 = ddx * ddx + ddy * ddy, R = 160 * dpr;
+      if (d2 < R * R * 4) { const k = Math.exp(-d2 / (R * R)); vx += -ddy * 0.012 * k * speed + mdx * 0.25 * k; vy += ddx * 0.012 * k * speed + mdy * 0.25 * k; }
+      for (const b of burst) { const bx = x - b.x, by = y - b.y, bd = bx * bx + by * by + 400; const k = b.a * 5e5 * dpr / bd; vx += bx * k * 0.02; vy += by * k * 0.02; }
+      x += vx * dt; y += vy * dt;
+      const sp = Math.min(1, Math.hypot(vx, vy) / (speed * 1.2));
+      g.fillStyle = `hsla(${160 + sp * 120} 95% ${50 + sp * 25}% / ${0.18 + sp * 0.35})`;
+      g.fillRect(x, y, dpr * 1.2, dpr * 1.2);
+      px[i] = x; py[i] = y; age[i] -= 60 * dt;
+      if (age[i] < 0 || x < 0 || y < 0 || x > W || y > H) seed(i);
+    }
+    burst = burst.filter((b) => (b.a *= 0.93) > 0.02);
+    mdx *= 0.8; mdy *= 0.8;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
