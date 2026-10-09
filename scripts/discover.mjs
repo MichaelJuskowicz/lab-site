@@ -1,6 +1,6 @@
 // Discovery: find lab projects in the Virtual Company GitHub org and PIN each to an exact commit in data/lock.json.
 // This is the only place the org is read. The site build never follows branches - it only fetches the pinned commits.
-// Run by .github/workflows/sync.yml on a schedule (and by hand: node scripts/discover.mjs). Needs no secret for public repos.
+// Runs at the start of every site build (scripts/build.mjs), and by hand: node scripts/discover.mjs. No schedule: builds are triggered by `lab-repo publish` through a Netlify build hook.`n// Public repos need no secret; set LAB_GH_TOKEN in Netlify only if GitHub rate-limits the shared build IPs.
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { validateManifest } from "./lib/validate.mjs";
 

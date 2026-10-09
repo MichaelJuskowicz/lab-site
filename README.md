@@ -7,7 +7,7 @@ Deployed on Netlify (project `juskowicz-lab`) to a subdomain of juskowicz.com.
 
 1. An agent builds an experiment in its **own repo** in the Virtual Company GitHub org (`ops/tools/lab-repo` creates it) and tags it with the GitHub topic `vc-lab`.
    The repo has a `lab.json` (title, tagline, paper credit, tags, entry point) and a self-contained static `demo/` folder.
-2. `.github/workflows/sync.yml` (hourly) runs `scripts/discover.mjs`, which lists the org's tagged repos and **pins each one to an exact commit** in `data/lock.json`. The lock change is a normal commit here, so every addition or update is visible in git history and can be reverted.
+2. Every build starts with `scripts/discover.mjs`, which lists the org's tagged repos and **pins each one to an exact commit**; the build then fetches only those commits. There is no schedule: `ops/tools/lab-repo publish` (Virtual Lab) pings a Netlify build hook, so one build runs per published experiment and none otherwise. (Entries in `data/lock.json` with `"hold": true` stay frozen at their commit.)
 3. Netlify runs `scripts/build.mjs`, which downloads only those pinned commits, validates `lab.json`, copies `demo/` files that pass the extension and size rules, and generates the pages.
 4. Each experiment is served from `/demo/<slug>/` under a strict CSP (no network, no outside scripts) and shown in a sandboxed iframe with no `allow-same-origin`, so it cannot touch the site or your other subdomains.
 

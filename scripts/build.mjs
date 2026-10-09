@@ -1,10 +1,14 @@
 // Site build (runs on Netlify: `node scripts/build.mjs`).
-// Inputs : data/lock.json (pinned commits), local-projects/ (hand-made entries), site/ (templates and assets).
+// Inputs : data/lock.json (written by scripts/discover.mjs at the start of the build; committed copy only holds "hold" pins), local-projects/ (hand-made entries), site/ (templates and assets).
 // Output : dist/  (static files only). Projects that fail validation are skipped, never fatal.
 import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync, existsSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, extname } from "node:path";
 import { validateManifest } from "./lib/validate.mjs";
 import { readTarGz } from "./lib/tar.mjs";
+
+// Discovery runs as the first step of every build: a build happens only when something is published (build hook) or this repo changes,
+// so nothing runs on a timer. If GitHub cannot be reached the build falls back to the committed data/lock.json.
+if (!process.env.LAB_SKIP_DISCOVER) { try { await import("./discover.mjs"); } catch (e) { console.warn("discovery failed, using the committed lock:", e.message); } }
 
 const cfg = JSON.parse(readFileSync("lab.config.json", "utf8"));
 const lock = existsSync("data/lock.json") ? JSON.parse(readFileSync("data/lock.json", "utf8")) : { projects: [] };
